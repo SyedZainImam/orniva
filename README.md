@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Orniva — Where Elegance Adorns You
+
+Premium jewellery brand website built with Next.js, Tailwind CSS, and Sanity.io CMS.
+
+## Tech Stack
+
+- **Next.js 16** (App Router, TypeScript)
+- **Tailwind CSS v4** for styling
+- **Sanity.io** for CMS / admin panel
+- **Vercel** for deployment
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set up Sanity
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Go to [sanity.io/manage](https://www.sanity.io/manage) and create a new project
+2. Copy your **Project ID**
+3. Create a `.env.local` file:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.local.example .env.local
+```
 
-## Learn More
+4. Fill in your Sanity project ID in `.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+```
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. In your Sanity project settings, add `http://localhost:3000` to the CORS origins
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Run the development server
 
-## Deploy on Vercel
+```bash
+yarn dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Website: [http://localhost:3000](http://localhost:3000)
+- Admin Studio: [http://localhost:3000/studio](http://localhost:3000/studio)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Homepage with hero, collections, featured products |
+| `/collections` | All collections listing |
+| `/collections/[slug]` | Individual collection with products |
+| `/products/[slug]` | Product detail page |
+| `/about` | About Orniva |
+| `/contact` | Contact form |
+| `/studio` | Sanity CMS admin panel |
+
+## CMS Content Types
+
+- **Site Settings** — Logo, tagline, social links
+- **Hero Banner** — Homepage hero section
+- **Collections** — Product categories
+- **Products** — Individual products with images, pricing, badges
+- **About Page** — About us content
+
+## Deploy to Vercel
+
+1. Push to GitHub
+2. Import project in [Vercel](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Deploy
+
+## Project Structure
+
+```
+src/
+├── app/                  # Next.js App Router pages
+│   ├── studio/           # Sanity Studio (admin panel)
+│   ├── collections/      # Collection pages
+│   ├── products/         # Product pages
+│   ├── about/            # About page
+│   └── contact/          # Contact page
+├── components/           # Reusable UI components
+└── sanity/
+    ├── schemas/          # Sanity content schemas
+    └── lib/              # Sanity client & queries
+```
