@@ -2,25 +2,9 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import type { Metadata } from "next";
 
-const collectionData: Record<
-  string,
-  {
-    title: string;
-    description: string;
-    products: Array<{
-      _id: string;
-      title: string;
-      slug: { current: string };
-      price: number;
-      compareAtPrice?: number;
-      badge?: "new" | "bestseller" | "sale" | "limited";
-      images: Array<{ asset?: { _ref: string } }>;
-    }>;
-  }
-> = {
+const collectionData: Record<string, { title: string; description: string; products: Array<{ _id: string; title: string; slug: { current: string }; price: number; compareAtPrice?: number; badge?: "new" | "bestseller" | "sale" | "limited"; images: never[] }> }> = {
   bangles: {
-    title: "Bangles & Bracelets",
-    description: "Timeless pieces that wrap your style in elegance",
+    title: "Bangles & Bracelets", description: "Timeless pieces that wrap your style in elegance",
     products: [
       { _id: "b1", title: "Gold Plated Elegant Bangle Set", slug: { current: "gold-plated-elegant-bangle-set" }, price: 2499, compareAtPrice: 3499, badge: "bestseller", images: [] },
       { _id: "b2", title: "Crystal Studded Bangles Pack of 6", slug: { current: "crystal-studded-bangles-6" }, price: 1899, badge: "new", images: [] },
@@ -31,8 +15,7 @@ const collectionData: Record<
     ],
   },
   necklaces: {
-    title: "Necklaces & Pendants",
-    description: "Delicate to statement designs for every look",
+    title: "Necklaces & Pendants", description: "Delicate to statement designs for every look",
     products: [
       { _id: "n1", title: "Crystal Drop Necklace", slug: { current: "crystal-drop-necklace" }, price: 3999, badge: "new", images: [] },
       { _id: "n2", title: "Kundan Bridal Mala Set", slug: { current: "kundan-bridal-mala-set" }, price: 7499, badge: "limited", images: [] },
@@ -43,8 +26,7 @@ const collectionData: Record<
     ],
   },
   earrings: {
-    title: "Earrings",
-    description: "From minimal studs to bold, eye-catching styles",
+    title: "Earrings", description: "From minimal studs to bold, eye-catching styles",
     products: [
       { _id: "e1", title: "Pearl Stud Earrings", slug: { current: "pearl-stud-earrings" }, price: 1299, compareAtPrice: 1799, badge: "sale", images: [] },
       { _id: "e2", title: "Antique Jhumka Earrings", slug: { current: "antique-jhumka-earrings" }, price: 2199, compareAtPrice: 2999, images: [] },
@@ -55,8 +37,7 @@ const collectionData: Record<
     ],
   },
   rings: {
-    title: "Rings",
-    description: "Crafted to add charm and personality",
+    title: "Rings", description: "Crafted to add charm and personality",
     products: [
       { _id: "r1", title: "Rose Gold Statement Ring", slug: { current: "rose-gold-statement-ring" }, price: 1999, images: [] },
       { _id: "r2", title: "Solitaire Crystal Ring", slug: { current: "solitaire-crystal-ring" }, price: 1499, badge: "new", images: [] },
@@ -65,8 +46,7 @@ const collectionData: Record<
     ],
   },
   bracelets: {
-    title: "Bracelets",
-    description: "Elegant chain bracelets and cuffs for every wrist",
+    title: "Bracelets", description: "Elegant chain bracelets and cuffs for every wrist",
     products: [
       { _id: "br1", title: "Delicate Chain Bracelet", slug: { current: "delicate-chain-bracelet" }, price: 999, badge: "new", images: [] },
       { _id: "br2", title: "Gold Cuff Bracelet", slug: { current: "gold-cuff-bracelet" }, price: 2499, images: [] },
@@ -74,8 +54,7 @@ const collectionData: Record<
     ],
   },
   bridal: {
-    title: "Bridal Collection",
-    description: "Complete sets for your special day",
+    title: "Bridal Collection", description: "Complete sets for your special day",
     products: [
       { _id: "brd1", title: "Complete Bridal Jewellery Set", slug: { current: "complete-bridal-set" }, price: 12999, badge: "limited", images: [] },
       { _id: "brd2", title: "Gold Bridal Mala with Earrings", slug: { current: "gold-bridal-mala-earrings" }, price: 8999, badge: "bestseller", images: [] },
@@ -84,17 +63,12 @@ const collectionData: Record<
   },
 };
 
-type Props = {
-  params: Promise<{ slug: string }>;
-};
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const collection = collectionData[slug];
-  return {
-    title: collection ? `${collection.title} — Orniva` : "Collection — Orniva",
-    description: collection?.description || "Explore our jewellery collection",
-  };
+  const c = collectionData[slug];
+  return { title: c ? `${c.title} — Orniva` : "Collection — Orniva", description: c?.description };
 }
 
 export default async function CollectionPage({ params }: Props) {
@@ -105,16 +79,9 @@ export default async function CollectionPage({ params }: Props) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-heading text-3xl font-semibold text-text-primary mb-4">
-            Collection Not Found
-          </h1>
-          <p className="text-text-secondary mb-6">
-            This collection doesn&apos;t exist yet. Check back soon!
-          </p>
-          <Link
-            href="/collections"
-            className="inline-block bg-gold hover:bg-gold-dark text-white font-heading text-sm tracking-widest uppercase px-8 py-3 transition-colors"
-          >
+          <h1 className="font-heading text-3xl font-semibold text-text mb-4">Collection Not Found</h1>
+          <p className="text-text-faint mb-6">This collection doesn&apos;t exist yet.</p>
+          <Link href="/collections" className="inline-block bg-gold hover:bg-gold-dark text-bg font-heading text-[11px] tracking-[0.2em] uppercase px-8 py-3 transition-colors">
             View All Collections
           </Link>
         </div>
@@ -124,42 +91,33 @@ export default async function CollectionPage({ params }: Props) {
 
   return (
     <>
-      {/* Header */}
-      <section className="bg-emerald-brand py-10 md:py-16">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 text-center">
-          <nav className="text-white/50 text-xs tracking-wider mb-4">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href="/collections" className="hover:text-white transition-colors">Collections</Link>
-            <span className="mx-2">/</span>
-            <span className="text-gold-light">{collection.title}</span>
+      <section className="bg-bg-card border-b border-border py-10 md:py-16">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 text-center">
+          <nav className="text-text-faint text-[11px] tracking-wider mb-4">
+            <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+            <span className="mx-2 text-border">/</span>
+            <Link href="/collections" className="hover:text-gold transition-colors">Collections</Link>
+            <span className="mx-2 text-border">/</span>
+            <span className="text-gold">{collection.title}</span>
           </nav>
-          <h1 className="font-heading text-3xl md:text-4xl font-semibold text-white mb-3">
-            {collection.title}
-          </h1>
-          <p className="text-white/60 text-sm md:text-base">
-            {collection.description}
-          </p>
+          <h1 className="font-heading text-3xl md:text-4xl font-semibold text-text mb-3">{collection.title}</h1>
+          <p className="text-text-faint text-sm">{collection.description}</p>
         </div>
       </section>
 
-      {/* Products Grid */}
-      <section className="py-10 md:py-16 px-4 md:px-8 max-w-[1600px] mx-auto">
+      <section className="py-10 md:py-16 px-4 md:px-8 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <p className="text-text-secondary text-sm">
-            {collection.products.length} product{collection.products.length !== 1 ? "s" : ""}
-          </p>
-          <select className="border border-border-light px-4 py-2 text-sm font-body text-text-primary focus:outline-none focus:border-gold">
+          <p className="text-text-faint text-sm">{collection.products.length} product{collection.products.length !== 1 ? "s" : ""}</p>
+          <select className="bg-bg-card border border-border px-4 py-2 text-sm text-text-muted focus:outline-none focus:border-gold">
             <option>Sort by: Featured</option>
             <option>Price: Low to High</option>
             <option>Price: High to Low</option>
             <option>Newest First</option>
           </select>
         </div>
-
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-          {collection.products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+          {collection.products.map((p) => (
+            <ProductCard key={p._id} product={p} />
           ))}
         </div>
       </section>

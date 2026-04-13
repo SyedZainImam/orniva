@@ -6,23 +6,15 @@ export default function Newsletter() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="py-16 md:py-20 bg-gold-50">
+    <section className="py-16 md:py-20 bg-bg">
       <div className="max-w-2xl mx-auto text-center px-4">
-        <p className="text-gold font-heading text-xs md:text-sm tracking-[0.3em] uppercase mb-3">
-          Stay Connected
-        </p>
-        <h2 className="font-heading text-2xl md:text-3xl font-semibold text-text-primary mb-4">
-          Join the Orniva Family
-        </h2>
-        <p className="text-text-secondary text-sm md:text-base mb-8">
-          Subscribe to receive updates on new collections, exclusive offers, and styling
-          inspiration delivered straight to your inbox.
+        <p className="text-gold font-heading text-[11px] tracking-[0.3em] uppercase mb-3">Stay Connected</p>
+        <h2 className="font-heading text-2xl md:text-3xl font-semibold text-text mb-4">Join the Orniva Family</h2>
+        <p className="text-text-faint text-sm mb-8">
+          Subscribe to receive updates on new collections, exclusive offers, and styling inspiration.
         </p>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setEmail("");
-          }}
+          onSubmit={(e) => { e.preventDefault(); setEmail(""); }}
           className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
         >
           <input
@@ -30,12 +22,12 @@ export default function Newsletter() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
-            className="flex-1 px-5 py-3.5 border border-border-light text-sm focus:outline-none focus:border-gold font-body"
+            className="flex-1 px-5 py-3.5 bg-bg-card border border-border text-sm text-text focus:outline-none focus:border-gold font-body placeholder:text-text-faint transition-colors"
             required
           />
           <button
             type="submit"
-            className="bg-gold hover:bg-gold-dark text-white font-heading text-xs tracking-widest uppercase px-8 py-3.5 transition-colors duration-300 whitespace-nowrap"
+            className="bg-gold hover:bg-gold-dark text-bg font-heading text-[11px] tracking-[0.2em] uppercase px-8 py-3.5 transition-colors whitespace-nowrap"
           >
             Subscribe
           </button>

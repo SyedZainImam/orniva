@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-gold: #a8712a;
-  --color-gold-light: #c99a45;
-  --color-gold-dark: #8a5a1e;
-  --color-gold-50: #fdf8f0;
-  --color-gold-100: #f5e6cc;
-  --color-gold-200: #e8c88f;
-  --color-cream: #fefcf7;
-  --color-emerald-brand: #1a3c34;
-  --color-emerald-light: #2d5a4e;
-  --color-charcoal: #242833;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #7b7b7b;
-  --color-border-light: #e8e8e8;
+  --color-bg: #0a0a0a;
+  --color-bg-card: #141414;
+  --color-bg-elevated: #1a1a1a;
+  --color-bg-hover: #222222;
+  --color-border: #2a2a2a;
+  --color-border-light: #333333;
+  --color-gold: #c9a84c;
+  --color-gold-light: #d4b95e;
+  --color-gold-dark: #a88a3a;
+  --color-gold-muted: #c9a84c26;
+  --color-text: #ffffff;
+  --color-text-muted: #b3b3b3;
+  --color-text-faint: #666666;
+  --color-red-sale: #e53e3e;
 
   --font-heading: "Montserrat", sans-serif;
   --font-body: "Poppins", "Helvetica", "Arial", sans-serif;
@@ -25,7 +26,6 @@
   font-weight: 100 900;
   font-display: swap;
   src: url("https://fonts.gstatic.com/s/montserrat/v29/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -34,7 +34,6 @@
   font-weight: 100 900;
   font-display: swap;
   src: url("https://fonts.gstatic.com/s/poppins/v22/pxiEyp8kv8JHgFVrJJfecg.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 * {
@@ -49,30 +48,20 @@ html {
 
 body {
   font-family: var(--font-body);
-  color: var(--color-text-primary);
-  background: #ffffff;
+  color: #ffffff;
+  background: #0a0a0a;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #a88a3a; border-radius: 3px; }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-gold);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold-dark);
+::selection {
+  background: #c9a84c;
+  color: #0a0a0a;
 }
