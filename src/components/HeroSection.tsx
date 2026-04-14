@@ -23,7 +23,7 @@ export default function HeroSection() {
             alt="Orniva"
             width={240}
             height={240}
-            className="w-[140px] md:w-[180px] lg:w-[220px] h-auto mx-auto brightness-0 invert opacity-80"
+            className="w-[140px] md:w-[180px] lg:w-[220px] h-auto mx-auto"
             priority
           />
         </div>

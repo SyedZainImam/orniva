@@ -46,7 +46,7 @@ export default function Header() {
                 alt="Orniva"
                 width={140}
                 height={50}
-                className="h-[42px] md:h-[52px] w-auto object-contain brightness-0 invert"
+                className="h-[42px] md:h-[52px] w-auto object-contain"
                 priority
               />
             </Link>
@@ -117,7 +117,7 @@ export default function Header() {
                 alt="Orniva"
                 width={100}
                 height={36}
-                className="h-[32px] w-auto object-contain brightness-0 invert"
+                className="h-[32px] w-auto object-contain"
               />
               <button onClick={() => setMobileMenuOpen(false)} className="text-text-muted">
                 <HiOutlineX size={22} />

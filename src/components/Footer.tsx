@@ -14,7 +14,7 @@ export default function Footer() {
               alt="Orniva"
               width={150}
               height={55}
-              className="h-[50px] w-auto object-contain brightness-0 invert mb-5"
+              className="h-[50px] w-auto object-contain mb-5"
             />
             <p className="text-text-faint text-sm leading-relaxed">
               Where Elegance Adorns You. Timeless jewellery designed for every generation.
