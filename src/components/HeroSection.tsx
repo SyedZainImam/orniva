@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function HeroSection() {
   return (
@@ -17,26 +16,25 @@ export default function HeroSection() {
         }} />
 
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-        <div className="mb-8 md:mb-10">
-          <Image
-            src="/images/logo-transparent.png"
-            alt="Orniva"
-            width={240}
-            height={240}
-            className="w-[140px] md:w-[180px] lg:w-[220px] h-auto mx-auto"
-            priority
-          />
+        {/* Decorative diamond icon */}
+        <div className="mb-6 md:mb-8 flex justify-center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-gold opacity-60">
+            <path d="M12 2L15 9H9L12 2Z" fill="currentColor"/>
+            <path d="M12 22L9 15H15L12 22Z" fill="currentColor"/>
+            <path d="M2 12L9 9V15L2 12Z" fill="currentColor"/>
+            <path d="M22 12L15 15V9L22 12Z" fill="currentColor"/>
+          </svg>
         </div>
 
-        <p className="text-gold font-heading text-[10px] md:text-[11px] tracking-[0.4em] uppercase mb-4 md:mb-6 font-medium">
+        <h1 className="font-heading text-[36px] md:text-[52px] lg:text-[62px] font-bold leading-[1.1] mb-4 md:mb-5 text-white tracking-tight">
+          ORNIVA
+        </h1>
+
+        <p className="text-gold font-heading text-[10px] md:text-[11px] tracking-[0.4em] uppercase mb-6 md:mb-8 font-medium">
           Where Elegance Adorns You
         </p>
 
-        <h1 className="font-heading text-[28px] md:text-[44px] lg:text-[52px] font-bold leading-[1.15] mb-5 md:mb-7 text-white">
-          Discover Timeless
-          <br />
-          <span className="text-gold">Jewellery Collections</span>
-        </h1>
+        <div className="w-10 h-px bg-gold mx-auto mb-6 md:mb-8" />
 
         <p className="text-text-muted text-[13px] md:text-[15px] max-w-lg mx-auto leading-[1.7] mb-8 md:mb-12">
           From delicate everyday pieces to statement designs, each creation enhances your natural grace and tells your unique story.

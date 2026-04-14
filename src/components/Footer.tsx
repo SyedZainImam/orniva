@@ -9,13 +9,16 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-14 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            <Image
-              src="/images/logo-transparent.png"
-              alt="Orniva"
-              width={150}
-              height={55}
-              className="h-[50px] w-auto object-contain mb-5"
-            />
+            <div className="flex items-center gap-2.5 mb-5">
+              <Image
+                src="/images/logo-transparent.png"
+                alt="Orniva"
+                width={40}
+                height={40}
+                className="h-[38px] w-[38px] object-cover rounded-full"
+              />
+              <span className="font-heading text-[20px] font-bold text-white tracking-wide">ORNIVA</span>
+            </div>
             <p className="text-text-faint text-sm leading-relaxed">
               Where Elegance Adorns You. Timeless jewellery designed for every generation.
             </p>

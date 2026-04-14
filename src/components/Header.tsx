@@ -40,15 +40,16 @@ export default function Header() {
               {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
             </button>
 
-            <Link href="/" className="flex-shrink-0">
+            <Link href="/" className="flex-shrink-0 flex items-center gap-2.5">
               <Image
                 src="/images/logo-transparent.png"
                 alt="Orniva"
-                width={140}
-                height={50}
-                className="h-[42px] md:h-[52px] w-auto object-contain"
+                width={48}
+                height={48}
+                className="h-[36px] w-[36px] md:h-[42px] md:w-[42px] object-cover rounded-full"
                 priority
               />
+              <span className="font-heading text-[18px] md:text-[22px] font-bold text-white tracking-wide">ORNIVA</span>
             </Link>
 
             <div className="flex items-center gap-4">
@@ -112,13 +113,16 @@ export default function Header() {
           <div className="absolute inset-0 bg-black/70" onClick={() => setMobileMenuOpen(false)} />
           <div className="absolute top-0 left-0 h-full w-[280px] bg-bg-card border-r border-border overflow-y-auto">
             <div className="p-4 flex items-center justify-between border-b border-border">
-              <Image
-                src="/images/logo-transparent.png"
-                alt="Orniva"
-                width={100}
-                height={36}
-                className="h-[32px] w-auto object-contain"
-              />
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/images/logo-transparent.png"
+                  alt="Orniva"
+                  width={32}
+                  height={32}
+                  className="h-[30px] w-[30px] object-cover rounded-full"
+                />
+                <span className="font-heading text-[16px] font-bold text-white tracking-wide">ORNIVA</span>
+              </div>
               <button onClick={() => setMobileMenuOpen(false)} className="text-text-muted">
                 <HiOutlineX size={22} />
               </button>
