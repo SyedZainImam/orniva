@@ -23,11 +23,6 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Announcement Bar */}
-      <div className="bg-gold text-bg text-center py-2 px-4 text-[11px] tracking-[0.2em] font-semibold font-heading">
-        FREE SHIPPING ON ORDERS ABOVE RS. 3,000 &nbsp;|&nbsp; WHERE ELEGANCE ADORNS YOU
-      </div>
-
       {/* Main Header */}
       <div className="bg-bg-card border-b border-border">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
