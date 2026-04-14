@@ -5,8 +5,8 @@ export const metadata = {
 
 export default function StudioLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body style={{ margin: 0, padding: 0 }}>{children}</body>
-    </html>
+    <div className="fixed inset-0 z-[999]" style={{ margin: 0, padding: 0 }}>
+      {children}
+    </div>
   );
 }

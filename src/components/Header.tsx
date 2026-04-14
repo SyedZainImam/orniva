@@ -31,7 +31,7 @@ export default function Header() {
       {/* Main Header */}
       <div className="bg-bg-card border-b border-border">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between py-3 md:py-4">
+          <div className="relative flex items-center justify-between py-3 md:py-5">
             <button
               className="lg:hidden text-text p-1"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -40,16 +40,15 @@ export default function Header() {
               {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
             </button>
 
-            <Link href="/" className="flex-shrink-0 flex items-center gap-2.5">
+            <Link href="/" className="absolute left-1/2 -translate-x-1/2">
               <Image
                 src="/images/logo-transparent.png"
                 alt="Orniva"
-                width={48}
-                height={48}
-                className="h-[36px] w-[36px] md:h-[42px] md:w-[42px] object-cover rounded-full"
+                width={80}
+                height={80}
+                className="h-[60px] w-[60px] md:h-[75px] md:w-[75px] object-cover rounded-full"
                 priority
               />
-              <span className="font-heading text-[18px] md:text-[22px] font-bold text-white tracking-wide">ORNIVA</span>
             </Link>
 
             <div className="flex items-center gap-4">
@@ -119,9 +118,9 @@ export default function Header() {
                   alt="Orniva"
                   width={32}
                   height={32}
-                  className="h-[30px] w-[30px] object-cover rounded-full"
+                  className="h-[38px] w-[38px] object-cover rounded-full"
                 />
-                <span className="font-heading text-[16px] font-bold text-white tracking-wide">ORNIVA</span>
+                <span className="font-heading text-[18px] font-bold text-white tracking-wide">ORNIVA</span>
               </div>
               <button onClick={() => setMobileMenuOpen(false)} className="text-text-muted">
                 <HiOutlineX size={22} />
