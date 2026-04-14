@@ -14,24 +14,24 @@ const placeholderProducts = [
 
 export default function FeaturedProducts() {
   return (
-    <section className="py-16 md:py-24 bg-bg-card">
+    <section className="py-16 md:py-24" style={{ background: "#0e0e0e" }}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <p className="text-gold font-heading text-[11px] tracking-[0.3em] uppercase mb-3">Handpicked For You</p>
-          <h2 className="font-heading text-2xl md:text-4xl font-semibold text-text">Best Selling Jewellery</h2>
-          <div className="w-12 h-px bg-gold mx-auto mt-5" />
+          <p className="text-gold font-heading text-[10px] md:text-[11px] tracking-[0.3em] uppercase mb-3 font-medium">Handpicked For You</p>
+          <h2 className="font-heading text-[22px] md:text-[34px] font-bold text-white">Best Selling Jewellery</h2>
+          <div className="w-10 h-[1px] bg-gold mx-auto mt-5" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-4">
           {placeholderProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 md:mt-14">
           <Link
             href="/collections"
-            className="inline-block bg-gold hover:bg-gold-dark text-bg font-heading text-[11px] tracking-[0.2em] uppercase px-10 py-4 transition-all duration-300"
+            className="inline-block bg-gold hover:bg-gold-dark text-black font-heading text-[11px] font-semibold tracking-[0.2em] uppercase px-10 py-[14px] transition-all duration-300"
           >
             View All Products
           </Link>

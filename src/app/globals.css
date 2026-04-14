@@ -17,29 +17,7 @@
   --color-red-sale: #e53e3e;
 
   --font-heading: "Montserrat", sans-serif;
-  --font-body: "Poppins", "Helvetica", "Arial", sans-serif;
-}
-
-@font-face {
-  font-family: "Montserrat";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/montserrat/v29/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/poppins/v22/pxiEyp8kv8JHgFVrJJfecg.woff2") format("woff2");
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --font-body: "Poppins", sans-serif;
 }
 
 html {
@@ -51,6 +29,7 @@ body {
   color: #ffffff;
   background: #0a0a0a;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
