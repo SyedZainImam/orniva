@@ -7,7 +7,6 @@ import { useSession, signOut } from "next-auth/react";
 import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineHeart, HiOutlineMenu, HiOutlineX, HiOutlineUser } from "react-icons/hi";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
-import { useCurrency } from "@/context/CurrencyContext";
 
 const navLinks = [
   { href: "/", label: "HOME" },
@@ -28,33 +27,19 @@ export default function Header() {
   const { data: session } = useSession();
   const { totalItems } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
-  const { currency, setCurrency, currencies } = useCurrency();
 
   return (
     <header className="sticky top-0 z-50">
       <div className="bg-bg-card border-b border-border">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="relative flex items-center justify-between py-3 md:py-5">
-            <div className="flex items-center gap-3">
-              <button
-                className="lg:hidden text-text p-1"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
-              </button>
-
-              {/* Currency Selector */}
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="hidden sm:block bg-bg-elevated border border-border text-text-muted text-[10px] tracking-wider px-2 py-1.5 focus:outline-none focus:border-gold cursor-pointer"
-              >
-                {currencies.map((c) => (
-                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
-                ))}
-              </select>
-            </div>
+            <button
+              className="lg:hidden text-text p-1"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
+            </button>
 
             <Link href="/" className="absolute left-1/2 -translate-x-1/2">
               <Image
@@ -95,14 +80,14 @@ export default function Header() {
               </Link>
 
               {/* User Menu */}
-              <div className="relative">
+              <div className="relative flex items-center">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="text-text-muted hover:text-gold transition-colors"
+                  className="text-text-muted hover:text-gold transition-colors flex items-center justify-center"
                   aria-label="Account"
                 >
                   {session?.user?.image ? (
-                    <Image src={session.user.image} alt="" width={24} height={24} className="rounded-full" />
+                    <Image src={session.user.image} alt="" width={20} height={20} className="rounded-full" />
                   ) : (
                     <HiOutlineUser size={20} />
                   )}
@@ -197,19 +182,6 @@ export default function Header() {
               <button onClick={() => setMobileMenuOpen(false)} className="text-text-muted">
                 <HiOutlineX size={22} />
               </button>
-            </div>
-
-            {/* Mobile Currency Selector */}
-            <div className="px-6 py-3 border-b border-border/50">
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full bg-bg-elevated border border-border text-text-muted text-[11px] tracking-wider px-3 py-2 focus:outline-none focus:border-gold"
-              >
-                {currencies.map((c) => (
-                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
-                ))}
-              </select>
             </div>
 
             <nav className="py-2">

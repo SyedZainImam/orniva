@@ -5,9 +5,11 @@ import Image from "next/image";
 import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import { HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker } from "react-icons/hi";
 import { useSettings } from "@/context/SettingsContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function Footer() {
   const settings = useSettings();
+  const { currency, setCurrency, currencies } = useCurrency();
 
   const socialLinks = [
     { icon: FaFacebookF, label: "Facebook", url: settings.facebookUrl },
@@ -128,8 +130,23 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-2">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-text-faint text-xs">&copy; {new Date().getFullYear()} Orniva. All rights reserved.</p>
+
+          {/* Currency Selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-text-faint text-[10px] tracking-wider uppercase">Currency:</span>
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="bg-bg-elevated border border-border text-text-muted text-[11px] tracking-wider px-2 py-1 focus:outline-none focus:border-gold cursor-pointer"
+            >
+              {currencies.map((c) => (
+                <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
+              ))}
+            </select>
+          </div>
+
           <p className="text-text-faint text-xs tracking-wider">{settings.tagline || "Where Elegance Adorns You"}</p>
         </div>
       </div>

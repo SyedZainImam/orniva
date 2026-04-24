@@ -14,6 +14,8 @@ async function getSettings() {
   }
 }
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Orniva — Where Elegance Adorns You",
   description:
