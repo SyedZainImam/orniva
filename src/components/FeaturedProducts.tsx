@@ -1,20 +1,26 @@
-"use client";
-
 import Link from "next/link";
+import { client } from "@/sanity/lib/client";
+import { featuredProductsQuery } from "@/sanity/lib/queries";
 import ProductCard from "./ProductCard";
 
-const placeholderProducts = [
-  { _id: "1", title: "Gold Plated Elegant Bangle Set", slug: { current: "gold-plated-elegant-bangle-set" }, price: 2499, compareAtPrice: 3499, badge: "bestseller" as const, images: [] },
-  { _id: "2", title: "Crystal Drop Necklace", slug: { current: "crystal-drop-necklace" }, price: 3999, badge: "new" as const, images: [] },
-  { _id: "3", title: "Pearl Stud Earrings", slug: { current: "pearl-stud-earrings" }, price: 1299, compareAtPrice: 1799, badge: "sale" as const, images: [] },
-  { _id: "4", title: "Rose Gold Statement Ring", slug: { current: "rose-gold-statement-ring" }, price: 1999, images: [] },
-  { _id: "5", title: "Kundan Bridal Mala Set", slug: { current: "kundan-bridal-mala-set" }, price: 7499, badge: "limited" as const, images: [] },
-  { _id: "6", title: "Delicate Chain Bracelet", slug: { current: "delicate-chain-bracelet" }, price: 999, badge: "new" as const, images: [] },
-  { _id: "7", title: "Antique Jhumka Earrings", slug: { current: "antique-jhumka-earrings" }, price: 2199, compareAtPrice: 2999, images: [] },
-  { _id: "8", title: "Diamond Cut Choker", slug: { current: "diamond-cut-choker" }, price: 4999, badge: "bestseller" as const, images: [] },
-];
+interface Product {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  price: number;
+  compareAtPrice?: number;
+  badge?: "new" | "bestseller" | "sale" | "limited";
+  images: Array<{ asset?: { _ref: string } }>;
+}
 
-export default function FeaturedProducts() {
+export default async function FeaturedProducts() {
+  let products: Product[] = [];
+  try {
+    products = await client.fetch(featuredProductsQuery) || [];
+  } catch {}
+
+  if (products.length === 0) return null;
+
   return (
     <section className="py-16 md:py-24" style={{ background: "#0e0e0e" }}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
@@ -25,7 +31,7 @@ export default function FeaturedProducts() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-4">
-          {placeholderProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>

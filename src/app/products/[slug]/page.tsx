@@ -1,47 +1,53 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { client } from "@/sanity/lib/client";
+import { productBySlugQuery } from "@/sanity/lib/queries";
+import { PortableText } from "@portabletext/react";
 import ProductCard from "@/components/ProductCard";
 import ProductActions from "@/components/ProductActions";
+import ProductImageGallery from "@/components/ProductImageGallery";
 
-const allProducts: Record<string, { title: string; price: number; compareAtPrice?: number; sku: string; description: string; details: string; badge?: "new" | "bestseller" | "sale" | "limited"; collection: { title: string; slug: string } }> = {
-  "gold-plated-elegant-bangle-set": {
-    title: "Gold Plated Elegant Bangle Set", price: 2499, compareAtPrice: 3499, sku: "ORN-BNG-001",
-    description: "A stunning set of gold-plated bangles featuring intricate detailing and a lustrous finish. Perfect for both everyday elegance and special occasions.",
-    details: "Material: Alloy with Gold Plating | Set of 4 bangles | Available sizes: 2.4, 2.6, 2.8 | Care: Avoid contact with water and perfume",
-    badge: "bestseller", collection: { title: "Bangles & Bracelets", slug: "bangles" },
-  },
-  "crystal-drop-necklace": {
-    title: "Crystal Drop Necklace", price: 3999, sku: "ORN-NCK-001",
-    description: "An exquisite crystal drop necklace that catches the light beautifully. Designed to be the centrepiece of any outfit.",
-    details: "Material: Alloy with Silver/Gold finish | Chain length: 18 inches with 2 inch extender | Crystal pendant | Lobster clasp closure",
-    badge: "new", collection: { title: "Necklaces & Pendants", slug: "necklaces" },
-  },
-  "pearl-stud-earrings": {
-    title: "Pearl Stud Earrings", price: 1299, compareAtPrice: 1799, sku: "ORN-EAR-001",
-    description: "Classic pearl stud earrings that add a touch of timeless elegance to any look. Perfect for daily wear.",
-    details: "Material: Alloy with Gold Plating | Faux pearl | Push-back closure | Hypoallergenic",
-    badge: "sale", collection: { title: "Earrings", slug: "earrings" },
-  },
-};
+export const revalidate = 60;
 
-const relatedProducts = [
-  { _id: "rp1", title: "Crystal Studded Bangles", slug: { current: "crystal-studded-bangles-6" }, price: 1899, badge: "new" as const, images: [] },
-  { _id: "rp2", title: "Pearl Accent Gold Bangles", slug: { current: "pearl-accent-gold-bangles" }, price: 2799, images: [] },
-  { _id: "rp3", title: "Layered Gold Chain", slug: { current: "layered-gold-chain" }, price: 2999, badge: "bestseller" as const, images: [] },
-  { _id: "rp4", title: "Gold Hoop Earrings", slug: { current: "gold-hoop-earrings" }, price: 1499, images: [] },
-];
+interface Product {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  price: number;
+  compareAtPrice?: number;
+  description?: Array<{ _type: string; [key: string]: unknown }>;
+  details?: string;
+  images?: Array<{ asset?: { _ref: string } }>;
+  badge?: "new" | "bestseller" | "sale" | "limited";
+  sku?: string;
+  collection?: { title: string; slug: { current: string } };
+  relatedProducts?: Array<{
+    _id: string;
+    title: string;
+    slug: { current: string };
+    price: number;
+    compareAtPrice?: number;
+    badge?: "new" | "bestseller" | "sale" | "limited";
+    images: Array<{ asset?: { _ref: string } }>;
+  }>;
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const p = allProducts[slug];
-  return { title: p ? `${p.title} — Orniva` : "Product — Orniva", description: p?.description?.slice(0, 160) };
+  let product: Product | null = null;
+  try { product = await client.fetch(productBySlugQuery, { slug }); } catch {}
+  return {
+    title: product ? `${product.title} — Orniva` : "Product — Orniva",
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = allProducts[slug];
+
+  let product: Product | null = null;
+  try { product = await client.fetch(productBySlugQuery, { slug }); } catch {}
 
   if (!product) {
     return (
@@ -60,12 +66,19 @@ export default async function ProductPage({ params }: Props) {
   const discount = product.compareAtPrice ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100) : 0;
 
   const productData = {
-    _id: slug,
+    _id: product._id,
     title: product.title,
-    slug,
+    slug: product.slug.current,
     price: product.price,
     compareAtPrice: product.compareAtPrice,
   };
+
+  const collectionTitle = product.collection?.title || "";
+  const collectionSlug = product.collection?.slug?.current || "";
+  const relatedProducts = product.relatedProducts || [];
+
+  const badgeLabel = product.badge === "new" ? "New Arrival" : product.badge === "bestseller" ? "Best Seller" : product.badge === "sale" ? "On Sale" : product.badge === "limited" ? "Limited Edition" : "";
+  const badgeClass = product.badge === "sale" ? "bg-red-sale text-white" : product.badge === "new" ? "bg-gold text-bg" : product.badge === "bestseller" ? "bg-white/90 text-bg" : "bg-bg-elevated text-gold border border-gold/30";
 
   return (
     <>
@@ -73,8 +86,12 @@ export default async function ProductPage({ params }: Props) {
       <div className="bg-bg-card border-b border-border py-3 px-4 md:px-8">
         <nav className="max-w-[1400px] mx-auto text-text-faint text-[11px] tracking-wider">
           <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-          <span className="mx-2 text-border">/</span>
-          <Link href={`/collections/${product.collection.slug}`} className="hover:text-gold transition-colors">{product.collection.title}</Link>
+          {collectionSlug && (
+            <>
+              <span className="mx-2 text-border">/</span>
+              <Link href={`/collections/${collectionSlug}`} className="hover:text-gold transition-colors">{collectionTitle}</Link>
+            </>
+          )}
           <span className="mx-2 text-border">/</span>
           <span className="text-text-muted">{product.title}</span>
         </nav>
@@ -85,47 +102,38 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-14">
           {/* Image */}
           <div>
-            <div className="aspect-square bg-bg-card border border-border relative overflow-hidden mb-3">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-full border border-border flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold text-4xl font-heading">{product.title[0]}</span>
-                  </div>
-                  <span className="text-text-faint text-[10px] tracking-[0.15em] uppercase">Product Image</span>
-                </div>
-              </div>
-              {product.badge && (
-                <div className={`absolute top-4 left-4 px-3 py-1.5 text-[10px] font-semibold tracking-wider uppercase ${product.badge === "sale" ? "bg-red-sale text-white" : product.badge === "new" ? "bg-gold text-bg" : product.badge === "bestseller" ? "bg-white/90 text-bg" : "bg-bg-elevated text-gold border border-gold/30"}`}>
-                  {product.badge === "new" ? "New Arrival" : product.badge === "bestseller" ? "Best Seller" : product.badge === "sale" ? "On Sale" : "Limited Edition"}
-                </div>
-              )}
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-bg-card border border-border hover:border-gold/30 cursor-pointer transition-colors" />
-              ))}
-            </div>
+            <ProductImageGallery images={product.images} title={product.title} badge={product.badge} badgeLabel={badgeLabel} badgeClass={badgeClass} />
           </div>
 
           {/* Info */}
           <div>
-            <p className="text-text-faint text-[11px] tracking-[0.15em] uppercase mb-2">{product.collection.title} | SKU: {product.sku}</p>
+            <p className="text-text-faint text-[11px] tracking-[0.15em] uppercase mb-2">
+              {collectionTitle}{product.sku ? ` | SKU: ${product.sku}` : ""}
+            </p>
             <h1 className="font-heading text-2xl md:text-3xl font-semibold text-text mb-5">{product.title}</h1>
 
             <ProductActions product={productData} discount={discount} />
 
-            <p className="text-text-muted text-sm leading-relaxed mb-6">{product.description}</p>
-            <div className="border-t border-border my-6" />
+            {product.description && (
+              <div className="text-text-muted text-sm leading-relaxed mb-6 prose-orniva">
+                <PortableText value={product.description} />
+              </div>
+            )}
 
-            <div className="border-t border-border pt-6">
-              <h3 className="font-heading text-[11px] font-semibold tracking-[0.15em] uppercase text-text mb-3">Product Details</h3>
-              <p className="text-text-faint text-sm leading-relaxed">{product.details}</p>
-            </div>
+            {product.details && (
+              <>
+                <div className="border-t border-border my-6" />
+                <div className="border-t border-border pt-6">
+                  <h3 className="font-heading text-[11px] font-semibold tracking-[0.15em] uppercase text-text mb-3">Product Details</h3>
+                  <p className="text-text-faint text-sm leading-relaxed">{product.details}</p>
+                </div>
+              </>
+            )}
 
             <div className="border-t border-border mt-6 pt-6">
               <div className="grid grid-cols-3 gap-4 text-center">
                 {[
-                  { t: "Free Shipping", d: "Above Rs. 3,000" },
+                  { t: "Free Shipping", d: "On qualifying orders" },
                   { t: "Easy Returns", d: "7-day policy" },
                   { t: "Secure Checkout", d: "100% secure" },
                 ].map((item) => (
@@ -141,17 +149,19 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       {/* Related */}
-      <section className="py-12 md:py-16 bg-bg-card border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-xl md:text-2xl font-semibold text-text">You May Also Like</h2>
-            <div className="w-10 h-px bg-gold mx-auto mt-3" />
+      {relatedProducts.length > 0 && (
+        <section className="py-12 md:py-16 bg-bg-card border-t border-border">
+          <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+            <div className="text-center mb-10">
+              <h2 className="font-heading text-xl md:text-2xl font-semibold text-text">You May Also Like</h2>
+              <div className="w-10 h-px bg-gold mx-auto mt-3" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+              {relatedProducts.map((p) => <ProductCard key={p._id} product={p} />)}
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-            {relatedProducts.map((p) => <ProductCard key={p._id} product={p} />)}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }
