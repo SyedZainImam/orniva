@@ -29,9 +29,13 @@ export default defineConfig({
               .title("About Page")
               .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
             S.divider(),
+            S.listItem()
+              .title("Policy Pages")
+              .child(S.documentTypeList("policyPage").title("Policy Pages")),
+            S.divider(),
             ...S.documentTypeListItems().filter(
               (listItem) =>
-                !["siteSettings", "hero", "aboutPage"].includes(listItem.getId() as string)
+                !["siteSettings", "hero", "aboutPage", "policyPage"].includes(listItem.getId() as string)
             ),
           ]),
     }),

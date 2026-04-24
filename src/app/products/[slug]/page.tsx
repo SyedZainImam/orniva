@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ProductCard from "@/components/ProductCard";
-import AddToCartButton from "@/components/AddToCartButton";
+import ProductActions from "@/components/ProductActions";
 
 const allProducts: Record<string, { title: string; price: number; compareAtPrice?: number; sku: string; description: string; details: string; badge?: "new" | "bestseller" | "sale" | "limited"; collection: { title: string; slug: string } }> = {
   "gold-plated-elegant-bangle-set": {
@@ -59,6 +59,14 @@ export default async function ProductPage({ params }: Props) {
 
   const discount = product.compareAtPrice ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100) : 0;
 
+  const productData = {
+    _id: slug,
+    title: product.title,
+    slug,
+    price: product.price,
+    compareAtPrice: product.compareAtPrice,
+  };
+
   return (
     <>
       {/* Breadcrumb */}
@@ -104,25 +112,10 @@ export default async function ProductPage({ params }: Props) {
             <p className="text-text-faint text-[11px] tracking-[0.15em] uppercase mb-2">{product.collection.title} | SKU: {product.sku}</p>
             <h1 className="font-heading text-2xl md:text-3xl font-semibold text-text mb-5">{product.title}</h1>
 
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-2xl md:text-3xl font-bold text-gold">Rs. {product.price.toLocaleString()}</span>
-              {product.compareAtPrice && (
-                <>
-                  <span className="text-lg text-text-faint line-through">Rs. {product.compareAtPrice.toLocaleString()}</span>
-                  <span className="bg-red-sale text-white px-2 py-0.5 text-[10px] font-semibold">-{discount}% OFF</span>
-                </>
-              )}
-            </div>
+            <ProductActions product={productData} discount={discount} />
 
             <p className="text-text-muted text-sm leading-relaxed mb-6">{product.description}</p>
             <div className="border-t border-border my-6" />
-
-            <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <AddToCartButton />
-              <button className="flex-1 sm:flex-none border border-gold text-gold hover:bg-gold hover:text-bg font-heading text-[11px] tracking-[0.2em] uppercase px-8 py-4 transition-all duration-300">
-                Wishlist
-              </button>
-            </div>
 
             <div className="border-t border-border pt-6">
               <h3 className="font-heading text-[11px] font-semibold tracking-[0.15em] uppercase text-text mb-3">Product Details</h3>

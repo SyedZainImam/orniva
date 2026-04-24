@@ -3,7 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineMenu, HiOutlineX } from "react-icons/hi";
+import { useSession, signOut } from "next-auth/react";
+import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineHeart, HiOutlineMenu, HiOutlineX, HiOutlineUser } from "react-icons/hi";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const navLinks = [
   { href: "/", label: "HOME" },
@@ -20,20 +24,37 @@ const navLinks = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { data: session } = useSession();
+  const { totalItems } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
+  const { currency, setCurrency, currencies } = useCurrency();
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Main Header */}
       <div className="bg-bg-card border-b border-border">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="relative flex items-center justify-between py-3 md:py-5">
-            <button
-              className="lg:hidden text-text p-1"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                className="lg:hidden text-text p-1"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
+              </button>
+
+              {/* Currency Selector */}
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="hidden sm:block bg-bg-elevated border border-border text-text-muted text-[10px] tracking-wider px-2 py-1.5 focus:outline-none focus:border-gold cursor-pointer"
+              >
+                {currencies.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
+                ))}
+              </select>
+            </div>
 
             <Link href="/" className="absolute left-1/2 -translate-x-1/2">
               <Image
@@ -46,7 +67,7 @@ export default function Header() {
               />
             </Link>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 md:gap-4">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
                 className="text-text-muted hover:text-gold transition-colors"
@@ -54,12 +75,68 @@ export default function Header() {
               >
                 <HiOutlineSearch size={20} />
               </button>
-              <Link href="#" className="text-text-muted hover:text-gold transition-colors relative" aria-label="Cart">
-                <HiOutlineShoppingBag size={20} />
-                <span className="absolute -top-1.5 -right-1.5 bg-gold text-bg text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  0
-                </span>
+
+              <Link href="/wishlist" className="text-text-muted hover:text-gold transition-colors relative" aria-label="Wishlist">
+                <HiOutlineHeart size={20} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-gold text-bg text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
+
+              <Link href="/cart" className="text-text-muted hover:text-gold transition-colors relative" aria-label="Cart">
+                <HiOutlineShoppingBag size={20} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-gold text-bg text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+
+              {/* User Menu */}
+              <div className="relative">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="text-text-muted hover:text-gold transition-colors"
+                  aria-label="Account"
+                >
+                  {session?.user?.image ? (
+                    <Image src={session.user.image} alt="" width={24} height={24} className="rounded-full" />
+                  ) : (
+                    <HiOutlineUser size={20} />
+                  )}
+                </button>
+                {userMenuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-bg-card border border-border z-50 shadow-lg">
+                      {session ? (
+                        <>
+                          <div className="px-4 py-3 border-b border-border">
+                            <p className="text-text text-xs font-semibold truncate">{session.user?.name}</p>
+                            <p className="text-text-faint text-[10px] truncate">{session.user?.email}</p>
+                          </div>
+                          <button
+                            onClick={() => { signOut(); setUserMenuOpen(false); }}
+                            className="w-full text-left px-4 py-3 text-text-muted text-xs hover:text-gold hover:bg-bg-hover transition-colors"
+                          >
+                            Sign Out
+                          </button>
+                        </>
+                      ) : (
+                        <Link
+                          href="/login"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="block px-4 py-3 text-text-muted text-xs hover:text-gold hover:bg-bg-hover transition-colors"
+                        >
+                          Sign In
+                        </Link>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -121,6 +198,20 @@ export default function Header() {
                 <HiOutlineX size={22} />
               </button>
             </div>
+
+            {/* Mobile Currency Selector */}
+            <div className="px-6 py-3 border-b border-border/50">
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="w-full bg-bg-elevated border border-border text-text-muted text-[11px] tracking-wider px-3 py-2 focus:outline-none focus:border-gold"
+              >
+                {currencies.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} ({c.symbol})</option>
+                ))}
+              </select>
+            </div>
+
             <nav className="py-2">
               {navLinks.map((link) => (
                 <Link

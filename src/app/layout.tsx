@@ -2,6 +2,17 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Providers from "@/components/Providers";
+import { client } from "@/sanity/lib/client";
+import { settingsQuery } from "@/sanity/lib/queries";
+
+async function getSettings() {
+  try {
+    return await client.fetch(settingsQuery) || {};
+  } catch {
+    return {};
+  }
+}
 
 export const metadata: Metadata = {
   title: "Orniva — Where Elegance Adorns You",
@@ -15,11 +26,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+
   return (
     <html lang="en">
       <head>
@@ -31,9 +44,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-bg text-text">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers settings={settings}>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

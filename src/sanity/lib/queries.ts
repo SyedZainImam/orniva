@@ -5,7 +5,19 @@ export const settingsQuery = groq`*[_type == "siteSettings"][0]{
   tagline,
   description,
   logo,
-  announcementBar
+  contactEmail,
+  contactPhone,
+  whatsappNumber,
+  address,
+  workingHours,
+  facebookUrl,
+  instagramUrl,
+  tiktokUrl,
+  paymentMethods,
+  checkoutMessage,
+  freeShippingThreshold,
+  baseCurrency,
+  currencies
 }`;
 
 export const heroQuery = groq`*[_type == "hero"][0]{
@@ -92,4 +104,16 @@ export const aboutQuery = groq`*[_type == "aboutPage"][0]{
   content,
   philosophy,
   values
+}`;
+
+export const policyPageQuery = groq`*[_type == "policyPage" && slug.current == $slug][0]{
+  title,
+  slug,
+  content,
+  lastUpdated
+}`;
+
+export const allPolicyPagesQuery = groq`*[_type == "policyPage"]{
+  title,
+  slug
 }`;

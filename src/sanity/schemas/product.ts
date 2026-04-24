@@ -87,7 +87,7 @@ export default defineType({
     prepare({ title, media, price }) {
       return {
         title,
-        subtitle: price ? `Rs. ${price}` : "No price",
+        subtitle: price ? `C$${price}` : "No price",
         media,
       };
     },

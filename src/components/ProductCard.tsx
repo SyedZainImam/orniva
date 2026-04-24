@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface Product {
   _id: string;
@@ -18,6 +21,7 @@ const badgeConfig: Record<string, { bg: string; label: string }> = {
 };
 
 export default function ProductCard({ product }: { product: Product }) {
+  const { format } = useCurrency();
   const discount = product.compareAtPrice
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0;
@@ -29,7 +33,6 @@ export default function ProductCard({ product }: { product: Product }) {
       className="group block border border-border hover:border-gold/30 overflow-hidden transition-all duration-300"
       style={{ background: "#141414" }}
     >
-      {/* Image area */}
       <div className="relative overflow-hidden" style={{ aspectRatio: "1/1", background: "#1a1a1a" }}>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
@@ -52,21 +55,19 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         )}
 
-        {/* Hover quick view */}
         <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gold text-black text-center py-2.5 text-[9px] md:text-[10px] tracking-[0.15em] uppercase font-bold">
           Quick View
         </div>
       </div>
 
-      {/* Info */}
       <div className="p-3 md:p-4">
         <h3 className="text-[11px] md:text-[12px] font-medium text-text-muted leading-snug line-clamp-2 group-hover:text-gold transition-colors min-h-[32px]">
           {product.title}
         </h3>
         <div className="mt-2 flex items-baseline gap-2 flex-wrap">
-          <span className="text-[13px] md:text-[14px] font-bold text-gold">Rs. {product.price.toLocaleString()}</span>
+          <span className="text-[13px] md:text-[14px] font-bold text-gold">{format(product.price)}</span>
           {product.compareAtPrice && (
-            <span className="text-[10px] md:text-[11px] text-text-faint line-through">Rs. {product.compareAtPrice.toLocaleString()}</span>
+            <span className="text-[10px] md:text-[11px] text-text-faint line-through">{format(product.compareAtPrice)}</span>
           )}
         </div>
       </div>
