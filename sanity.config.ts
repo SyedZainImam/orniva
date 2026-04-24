@@ -32,10 +32,17 @@ export default defineConfig({
             S.listItem()
               .title("Policy Pages")
               .child(S.documentTypeList("policyPage").title("Policy Pages")),
+            S.listItem()
+              .title("Contact Messages")
+              .child(
+                S.documentTypeList("contactMessage")
+                  .title("Contact Messages")
+                  .defaultOrdering([{ field: "receivedAt", direction: "desc" }])
+              ),
             S.divider(),
             ...S.documentTypeListItems().filter(
               (listItem) =>
-                !["siteSettings", "hero", "aboutPage", "policyPage"].includes(listItem.getId() as string)
+                !["siteSettings", "hero", "aboutPage", "policyPage", "contactMessage"].includes(listItem.getId() as string)
             ),
           ]),
     }),
